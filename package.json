@@ -1,20 +1,23 @@
 {
   "name": "summer2019",
   "version": "1.0.0",
-  "description": "This coding task is meant for those aspiring engineers who are applying for Wolt's Engineering Internships in 2019. Optionally you can send us a link to your Github profile (containing existing projects) or any example of your code in any format of your preference, and skip this exercise altogether. Find the details to apply [here](https://jobs.lever.co/wolt/527274e5-f0ab-4ed7-842b-5c61cb137529), deadline to apply is 17.2.2019.",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/951219/wolt.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/951219/wolt/issues"
+  },
+  "homepage": "https://github.com/951219/wolt#readme",
   "dependencies": {
     "csv-parse": "^4.14.1",
-    "express": "^4.17.1",
     "fs": "0.0.1-security"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.6"
   }
 }
