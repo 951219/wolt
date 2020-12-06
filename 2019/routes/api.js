@@ -23,19 +23,13 @@ CSVtoJSON().fromFile("./data/pickup_times.csv").then(source => {
 })
 
 router.get("/locations", (req, res) => {
-    res.json(locations)
+    res.status(200).json(locations)
 })
 
-router.get("/times", (req, res) => {
-    res.json(pickupTimes)
-})
-
-//should be sent when the page is opened.
 router.get("/dates", (req, res) => {
-    res.json(dates)
+    res.status(200).json(dates)
 })
 
-//when filling the first field, geting the times for that particular day
 router.get("/getdatetimes/:date/", (req, res) => {
     var date = req.params.date;
     var dateTimes = [];
@@ -56,7 +50,7 @@ router.get("/getobjects/", async (req, res) => {
     var list = await getObjectsByDateTime(date, time);
 
     if (list) {
-        res.json(list);
+        res.status(200).json(list);
 
     } else {
         res.json({ message: "List is empty" })
@@ -90,7 +84,5 @@ function getObjectsByDateTime(date, time) {
     });
     return timesOnThatDay;
 }
-
-
 
 module.exports = router;

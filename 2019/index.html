@@ -4,48 +4,89 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="index.js"></script>
+    <script>
+      let locations = [];
+
+      fetch("/api/locations")
+        .then(function (response) {
+          if (response.status !== 200) {
+            console.warn(`Status Code: ${response.status} at /api/locations`);
+            return;
+          }
+          response.json().then((data) => {
+            locations = data;
+          });
+        })
+        .catch((err) => {
+          console.error(`Fetch Error at /api/locations, \n error: ${err}`);
+        });
+
+      fetch("/api/dates")
+        .then(function (response) {
+          if (response.status !== 200) {
+            console.warn(`Status Code: ${response.status} at /api/dates`);
+            return;
+          }
+          response.json().then((data) => {
+            let dropdown = document.getElementById("date-dropdown");
+            data.sort();
+            let option;
+            for (let i = 0; i < data.length; i++) {
+              option = document.createElement("option");
+              option.text = data[i];
+              option.value = data[i];
+              dropdown.add(option);
+            }
+
+            changeTimes(data[0]);
+          });
+        })
+        .catch((err) => {
+          console.error(`Fetch Error at /api/dates, \n error: ${err}`);
+        });
+
+      function changeTimes(date) {
+        let timedropdown = document.getElementById("time-dropdown");
+        timedropdown.innerText = null;
+
+        fetch(`/api/getdatetimes/${date}`)
+          .then(function (response) {
+            if (response.status !== 200) {
+              console.warn(
+                `Status Code: ${response.status} at /api/getdatetimes/${date}`
+              );
+              return;
+            }
+
+            response.json().then(function (data) {
+              data.sort();
+              let option;
+              for (let i = 0; i < data.length; i++) {
+                option = document.createElement("option");
+                option.text = data[i];
+                option.value = data[i];
+                timedropdown.add(option);
+              }
+            });
+          })
+          .catch(function (err) {
+            console.error(
+              `Fetch Error at /api/getdatetimes/${date}, \n error: ${err}`
+            );
+          });
+      }
+    </script>
   </head>
   <body>
     <form action="/api/getobjects/">
-      <label for="date">Date:</label>
-      <select id="date" name="date">
-        <option value="2019-01-13">2019-01-13</option>
-        <option value="2019-01-10">2019-01-10</option>
-        <option value="2019-01-08">2019-01-08</option>
-        <option value="2019-01-12">2019-01-12</option>
-        <option value="2019-01-07">2019-01-07</option>
-        <option value="2019-01-09">2019-01-09</option>
-        <option value="2019-01-11">2019-01-11</option>
-      </select>
-
-      <select id="time" name="time">
-        <option value="01">01</option>
-        <option value="02">02</option>
-        <option value="03">03</option>
-        <option value="04">04</option>
-        <option value="05">05</option>
-        <option value="06">06</option>
-        <option value="07">07</option>
-        <option value="08">08</option>
-        <option value="09">09</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-        <option value="21">21</option>
-        <option value="22">22</option>
-        <option value="23">23</option>
-        <option value="24">24</option>
-      </select>
-
+      <label for="date-dropdown">Date:</label>
+      <select
+        id="date-dropdown"
+        name="date"
+        onChange="changeTimes(this.value)"
+      ></select>
+      <label for="time-dropdown">Time:</label>
+      <select id="time-dropdown" name="time"></select>
       <input type="submit" />
     </form>
   </body>
