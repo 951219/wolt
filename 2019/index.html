@@ -15,34 +15,10 @@
       integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
       crossorigin=""
     ></script>
-    <style>
-      #mapid {
-        height: 600px;
-      }
-    </style>
-    <title>Document</title>
     <script>
       let locations = [];
       let displayedObjects = [];
       let markers = [];
-
-      fetch("/api/locations")
-        .then(function (response) {
-          if (response.status !== 200) {
-            console.warn(`Status Code: ${response.status} at /api/locations`);
-            return;
-          }
-          response.json().then((data) => {
-            locations = data;
-            mymap.setView(
-              [locations[0]["latitude"], locations[0]["longitude"]],
-              12
-            );
-          });
-        })
-        .catch((err) => {
-          console.error(`Fetch Error at /api/locations, \n error: ${err}`);
-        });
 
       fetch("/api/dates")
         .then(function (response) {
@@ -68,16 +44,32 @@
           console.error(`Fetch Error at /api/dates, \n error: ${err}`);
         });
 
-      function changeTimes(date) {
-        let timedropdown = document.getElementById("time-dropdown");
-        timedropdown.innerText = null;
+      fetch("/api/locations")
+        .then(function (response) {
+          if (response.status !== 200) {
+            console.warn(`Status Code: ${response.status} at /api/locations`);
+            return;
+          }
+          response.json().then((data) => {
+            locations = data;
+            mymap.setView(
+              [locations[0]["latitude"], locations[0]["longitude"]],
+              12
+            );
+          });
+        })
+        .catch((err) => {
+          console.error(`Fetch Error at /api/locations, \n error: ${err}`);
+        });
 
-        fetch(`/api/getdatetimes/${date}`)
+      function changeTimes(date) {
+        let timedropdown = document.getElementById("hour-dropdown");
+        timedropdown.innerText = null;
+        var url = `/api/getdatehours/${date}`;
+        fetch(url)
           .then(function (response) {
             if (response.status !== 200) {
-              console.warn(
-                `Status Code: ${response.status} at /api/getdatetimes/${date}`
-              );
+              console.warn(`Status Code: ${response.status} at ${url}`);
               return;
             }
 
@@ -100,14 +92,16 @@
       }
 
       function updateMap() {
+        // TODO add customer icon(text) to the map instead of the tooltip
         markers.forEach((element) => {
           mymap.removeLayer(element);
         });
 
         var date = document.getElementById("date-dropdown").value;
-        var time = document.getElementById("time-dropdown").value;
+        var hour = document.getElementById("hour-dropdown").value;
+        var minute = document.getElementById("minute-dropdown").value;
 
-        const url = `/api/getobjects/${date}/${time}`;
+        const url = `/api/getobjects/${date}/${hour}/${minute}`;
 
         fetch(url)
           .then(function (response) {
@@ -120,8 +114,12 @@
               data.forEach((element) => {
                 const id = element["location_id"];
                 const pickuptime = element["pickup_time"];
-                const latitude = locations[id]["latitude"];
-                const longitude = locations[id]["longitude"];
+                const locationObject = locations.filter((obj) => {
+                  return obj["location_id"] == id;
+                })[0];
+
+                const latitude = locationObject["latitude"];
+                const longitude = locationObject["longitude"];
 
                 var popup = L.popup({
                   closeButton: false,
@@ -139,6 +137,12 @@
           });
       }
     </script>
+    <style>
+      #mapid {
+        height: 600px;
+      }
+    </style>
+    <title>Document</title>
   </head>
   <body>
     <h2>
@@ -149,8 +153,23 @@
         onChange="changeTimes(this.value)"
       ></select>
       <br />
-      <label for="time-dropdown">Time:</label>
-      <select id="time-dropdown" name="time"></select>
+      <label for="hour-dropdown">Hour:</label>
+      <select id="hour-dropdown" name="hour"></select>
+      <br />
+      <label for="minute-dropdown">Minute:</label>
+      <select id="minute-dropdown" name="minute">
+        <script>
+          let minutedropdown = document.getElementById("minute-dropdown");
+
+          for (let i = 0; i < 60; i++) {
+            let option = document.createElement("option");
+
+            option.text = i;
+            option.value = i;
+            minutedropdown.add(option);
+          }
+        </script>
+      </select>
       <br />
       <button onclick="updateMap()">Search</button>
     </h2>
