@@ -49,10 +49,10 @@ router.get("/getdatetimes/:date/", (req, res) => {
 
 //getting the locationdata according the the query
 //time sent to the endpoint should only have hour data. 11(correct), 11.10(incorrect)
-router.get("/getobjects/:date/:time/", async (req, res) => {
-    var date = req.params.date;
-    var time = req.params.time;
-
+router.get("/getobjects/", async (req, res) => {
+    var date = req.query.date;
+    var time = req.query.time;
+    console.log(req.url);
     var list = await getObjectsByDateTime(date, time);
 
     if (list) {
