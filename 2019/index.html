@@ -54,7 +54,7 @@
             locations = data;
             mymap.setView(
               [locations[0]["latitude"], locations[0]["longitude"]],
-              12
+              13
             );
           });
         })
@@ -92,7 +92,6 @@
       }
 
       function updateMap() {
-        // TODO add customer icon(text) to the map instead of the tooltip
         markers.forEach((element) => {
           mymap.removeLayer(element);
         });
@@ -121,14 +120,16 @@
                 const latitude = locationObject["latitude"];
                 const longitude = locationObject["longitude"];
 
-                var popup = L.popup({
-                  closeButton: false,
-                  autoClose: false,
-                })
-                  .setLatLng([latitude, longitude])
-                  .setContent(pickuptime);
-                markers.push(popup);
-                mymap.addLayer(popup);
+                var label = L.marker([latitude, longitude], {
+                  icon: L.divIcon({
+                    iconSize: null,
+                    className: "label",
+                    html: "<div><h1>" + pickuptime + "</h1></div>",
+                  }),
+                });
+
+                markers.push(label);
+                mymap.addLayer(label);
               });
             });
           })
@@ -138,8 +139,29 @@
       }
     </script>
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
       #mapid {
         height: 600px;
+        position: absolute;
+        right: 0;
+        left: 0;
+      }
+
+      .label {
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: -1em;
+      }
+
+      .label div {
+        position: relative;
+        left: -50%;
+        /* top: 10px; */
+        text-shadow: 0px 2px 1px rgba(255, 255, 255, 0.85);
       }
     </style>
     <title>Document</title>
@@ -182,6 +204,7 @@
         const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
         const tiles = L.tileLayer(tileUrl, { attribution });
         tiles.addTo(mymap);
+        L.Control;
       </script>
     </div>
   </body>
