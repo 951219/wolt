@@ -3,9 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
+    <style>
+      #mapid {
+        height: 600px;
+      }
+    </style>
     <title>Document</title>
     <script>
       let locations = [];
+      let displayedObjects = [];
+      let markers = [];
 
       fetch("/api/locations")
         .then(function (response) {
@@ -15,6 +34,10 @@
           }
           response.json().then((data) => {
             locations = data;
+            mymap.setView(
+              [locations[0]["latitude"], locations[0]["longitude"]],
+              12
+            );
           });
         })
         .catch((err) => {
@@ -75,19 +98,72 @@
             );
           });
       }
+
+      function updateMap() {
+        markers.forEach((element) => {
+          mymap.removeLayer(element);
+        });
+
+        var date = document.getElementById("date-dropdown").value;
+        var time = document.getElementById("time-dropdown").value;
+
+        const url = `/api/getobjects/${date}/${time}`;
+
+        fetch(url)
+          .then(function (response) {
+            if (response.status !== 200) {
+              console.warn(`Status Code: ${response.status} at ${url}`);
+              return;
+            }
+
+            response.json().then(function (data) {
+              data.forEach((element) => {
+                const id = element["location_id"];
+                const pickuptime = element["pickup_time"];
+                const latitude = locations[id]["latitude"];
+                const longitude = locations[id]["longitude"];
+
+                var popup = L.popup({
+                  closeButton: false,
+                  autoClose: false,
+                })
+                  .setLatLng([latitude, longitude])
+                  .setContent(pickuptime);
+                markers.push(popup);
+                mymap.addLayer(popup);
+              });
+            });
+          })
+          .catch(function (err) {
+            console.error(`Fetch Error at ${url}, \n error: ${err}`);
+          });
+      }
     </script>
   </head>
   <body>
-    <form action="/api/getobjects/">
+    <h2>
       <label for="date-dropdown">Date:</label>
       <select
         id="date-dropdown"
         name="date"
         onChange="changeTimes(this.value)"
       ></select>
+      <br />
       <label for="time-dropdown">Time:</label>
       <select id="time-dropdown" name="time"></select>
-      <input type="submit" />
-    </form>
+      <br />
+      <button onclick="updateMap()">Search</button>
+    </h2>
+
+    <div id="mapid">
+      <script>
+        const mymap = L.map("mapid");
+        const attribution =
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+        const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+        const tiles = L.tileLayer(tileUrl, { attribution });
+        tiles.addTo(mymap);
+      </script>
+    </div>
   </body>
 </html>
