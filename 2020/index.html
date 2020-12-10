@@ -12,11 +12,15 @@
 
     <title>Document</title>
     <style>
-      body {
-        padding: 2rem 0rem;
+      h4,
+      h6 {
+        text-shadow: 2px 2px 8px black;
       }
       .card-img-overlay {
         background-color: rgba(#000, 0.4);
+      }
+      .container {
+        padding-top: 15px;
       }
     </style>
   </head>
@@ -30,34 +34,22 @@
           var restolist = data.restaurants;
           console.log(restolist);
           restolist.forEach((element) => {
-            var item = (document.createElement("option").innerHTML = `
+            var item = (document.createElement("component").innerHTML = `
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-sm-8 col-md-6 col-lg-4">
                     <div class="card">
                         <img
                         class="card-img"
-                        src="${element.image}"
-                        alt="Bologna"
-                        />
-                        <div
-                        class="card-img-overlay text-white d-flex flex-column justify-content-center"
-                        >
+                        src="${element.image}"/>
+                        <div class="card-img-overlay text-white d-flex flex-column ">
                         <h4 class="card-title">${element.name}</h4>
                         <h6 class="card-subtitle mb-2">${element.description}</h6>
-                        <p class="card-text">
-                            It is the seventh most populous city in Italy, at the heart of a
-                            metropolitan area of about one million people.
-                        </p>
-                        <div class="link d-flex">
-                            <a href="#" class="card-link text-warning">Read More</a>
-                            <a href="#" class="card-link text-warning">Book a Trip</a>
-                        </div>
                         </div>
                     </div>
                     </div>
                 </div>
-                </div>
+            </div>
             `);
 
             document.getElementById("list").innerHTML += item;
