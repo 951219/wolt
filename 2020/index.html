@@ -20,7 +20,7 @@
         background-color: rgba(#000, 0.4);
       }
       .container {
-        padding-top: 15px;
+        padding: 10px;
       }
     </style>
   </head>
@@ -37,10 +37,9 @@
             var item = (document.createElement("component").innerHTML = `
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                    <div class="col-lg-4">
                     <div class="card">
-                        <img
-                        class="card-img"
+                        <img class="card-img"
                         src="${element.image}"/>
                         <div class="card-img-overlay text-white d-flex flex-column ">
                         <h4 class="card-title">${element.name}</h4>
