@@ -1,0 +1,25 @@
+h4,
+h6 {
+  text-shadow: 2px 2px 8px black;
+}
+
+.container {
+  margin: 25px;
+  position: relative;
+  color: white;
+  width: 400px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.top-left-text {
+  position: absolute;
+  top: 0px;
+  left: 22px;
+}
+
+.top-left-text2 {
+  position: absolute;
+  top: 20px;
+  left: 22px;
+}
