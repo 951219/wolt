@@ -1,3 +1,5 @@
+
+
 fetch("./data/restaurants.json")
     .then((response) => {
         return response.json();
@@ -21,3 +23,14 @@ fetch("./data/restaurants.json")
     .catch((err) => {
         console.log(err);
     });
+
+
+
+// // document.getElementById('sort').onClick = function () { alert('1'); };
+
+// document.getElementById('sort').onclick = function changeContent() {
+
+//     document.getElementById('sort').textContent = "Help me";
+//     document.getElementById('sort').style = "Color: red";
+
+// }
