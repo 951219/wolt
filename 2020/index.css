@@ -1,7 +1,3 @@
-h4,
-h6 {
-  text-shadow: 2px 2px 8px black;
-}
 #sort {
   margin: 25px;
   padding: 10px 0px;
@@ -9,25 +5,40 @@ h6 {
   width: 400px;
   border-radius: 20px;
   text-align: center;
+  box-shadow: 1px 1px 5px black;
+}
+
+img {
+  width: 100%;
 }
 
 .container {
   margin: 25px;
   position: relative;
-  color: white;
   width: 400px;
-  border-radius: 30px;
+  height: 215px;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 1px 1px 5px black;
 }
 
 .top-left-text {
-  position: absolute;
-  top: 0px;
-  left: 22px;
+  color: white;
+  font-size: 20px;
+  padding: 0px;
+  margin-bottom: 10px;
 }
 
 .top-left-text2 {
+  color: white;
+  font-size: 15px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.text {
   position: absolute;
-  top: 20px;
-  left: 22px;
+  bottom: 0px;
+  left: 20px;
+  text-shadow: 3px 3px 10px black;
 }
