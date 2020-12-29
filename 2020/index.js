@@ -1,5 +1,6 @@
 let restolist;
 var list;
+var isAscending = true;
 
 
 fetch("./data/restaurants.json")
@@ -9,14 +10,14 @@ fetch("./data/restaurants.json")
     .then((data) => {
         restolist = data.restaurants;
         list = document.getElementById('list');
-        createRestoDiv();
+        ascending();
     })
     .catch((err) => {
         console.log(err);
     });
 
 
-function createRestoDiv() {
+function createRestoList() {
     restolist.forEach((element) => {
         var item = (document.createElement("div").innerHTML =
             `<div class="container">
@@ -32,17 +33,28 @@ function createRestoDiv() {
 
 }
 
-
-
 function ascending() {
     list.innerHTML = '';
     restolist.sort((a, b) => (a.name > b.name) ? 1 : -1);
-    createRestoDiv()
-
+    createRestoList()
+    document.getElementById('sort').innerText = ('Alphabetically ascending');
 }
 
 function descending() {
     list.innerHTML = '';
     restolist.sort((a, b) => (a.name < b.name) ? 1 : -1);
-    createRestoDiv();
+    createRestoList();
+    document.getElementById('sort').innerText = ('Alphabetically descending');
+}
+
+
+function changeState() {
+    if (isAscending) {
+        descending();
+        isAscending = false;
+
+    } else {
+        ascending();
+        isAscending = true;
+    }
 }
