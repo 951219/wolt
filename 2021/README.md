@@ -9,3 +9,6 @@ This assignement is put together with node.js, express.js framework and javascri
 3. Enter command: "node server.js"
 
 To view other data, file with the same name and the same format should be added to data folder.
+
+
+Kenert Karu
